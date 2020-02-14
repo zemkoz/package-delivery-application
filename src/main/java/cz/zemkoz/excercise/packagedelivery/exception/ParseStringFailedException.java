@@ -1,6 +1,6 @@
 package cz.zemkoz.excercise.packagedelivery.exception;
 
-public class ParseStringFailedException extends RuntimeException {
+public final class ParseStringFailedException extends RuntimeException {
     public ParseStringFailedException() {
     }
 }

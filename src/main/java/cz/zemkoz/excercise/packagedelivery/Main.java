@@ -1,11 +1,13 @@
 package cz.zemkoz.excercise.packagedelivery;
 
 import cz.zemkoz.excercise.packagedelivery.domain.PostPackage;
+import cz.zemkoz.excercise.packagedelivery.exception.LoadPostPackagesFailed;
 import cz.zemkoz.excercise.packagedelivery.exception.ParseStringFailedException;
 import cz.zemkoz.excercise.packagedelivery.repository.PostDao;
-import cz.zemkoz.excercise.packagedelivery.repository.PostInMemoryDatabase;
+import cz.zemkoz.excercise.packagedelivery.repository.PostRegister;
 import cz.zemkoz.excercise.packagedelivery.service.*;
 
+import java.io.File;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,13 +22,21 @@ public class Main {
     private static final TimerTask postPrinterTimerTask;
 
     static { // Simple DI configuration.
-        postDao = new PostInMemoryDatabase();
+        postDao = new PostRegister();
         postPackageParser = new PostPackageParser();
         postService = new PostServiceImpl(postPackageParser, postDao);
         postPrinterTimerTask = new PostPrinterTimerTask(postService);
     }
 
     public static void main(String...args) {
+        if(args.length > 0) {
+            try {
+                postService.processPostPackagesFromTextFile(new File(args[0]).toPath());
+            } catch (LoadPostPackagesFailed e) {
+                System.err.println(e.getMessage());
+            }
+        }
+
         Timer timer = new Timer(true);
         timer.scheduleAtFixedRate(postPrinterTimerTask, 0, MINUTE_IN_MILLIS);
 

@@ -11,6 +11,11 @@ public final class Post {
         totalWeight = 0D;
     }
 
+    public Post(String postcode, double totalWeight) {
+        this.postcode = postcode;
+        this.totalWeight = totalWeight;
+    }
+
     public String getPostcode() {
         return postcode;
     }
