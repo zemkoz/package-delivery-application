@@ -4,23 +4,23 @@ import java.util.Objects;
 
 public final class Post {
     private final String postcode;
-    private double packageWeightSum;
+    private double totalWeight;
 
     public Post(String postcode) {
         this.postcode = postcode;
-        packageWeightSum = 0D;
+        totalWeight = 0D;
     }
 
     public String getPostcode() {
         return postcode;
     }
 
-    public double getPackageWeightSum() {
-        return packageWeightSum;
+    public double getTotalWeight() {
+        return totalWeight;
     }
 
-    public void setPackageWeightSum(double packageWeightSum) {
-        this.packageWeightSum = packageWeightSum;
+    public void setTotalWeight(double totalWeight) {
+        this.totalWeight = totalWeight;
     }
 
     @Override
@@ -40,7 +40,7 @@ public final class Post {
     public String toString() {
         return "Post{" +
                 "postcode='" + postcode + '\'' +
-                ", packageWeightSum=" + packageWeightSum +
+                ", packageWeightSum=" + totalWeight +
                 '}';
     }
 }
