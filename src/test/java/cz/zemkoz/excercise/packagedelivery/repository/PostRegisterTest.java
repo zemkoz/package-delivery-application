@@ -5,12 +5,12 @@ import cz.zemkoz.excercise.packagedelivery.domain.PostPackage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PostRegisterTest {
     private PostDao postDao;
@@ -84,5 +84,54 @@ public class PostRegisterTest {
         assertEquals(postcode2, actualPost2.getPostcode());
         double expectedTotalWeight2 = postPackage2.getPackageWeight();
         assertEquals(expectedTotalWeight2, actualPost2.getTotalWeight());
+    }
+
+    @Test
+    public void testDeliverPackageToPostWithDeliveryFee() {
+        // Given
+        PostPackage postPackage = new PostPackage("94072", 1.578D);
+        BigDecimal deliveryFee = new BigDecimal(10);
+
+        // Test
+        postDao.deliverPackage(postPackage, deliveryFee);
+
+        // Verify
+        List<Post> actualPostList = postDao.findAllPosts();
+        assertNotNull(actualPostList);
+        assertEquals(1, actualPostList.size());
+
+        Post actualPost = actualPostList.get(0);
+        assertEquals(postPackage.getPostcode(), actualPost.getPostcode());
+        assertEquals(postPackage.getPackageWeight(), actualPost.getTotalWeight());
+
+        assertTrue(actualPost.getTotalDeliveryFee().isPresent());
+        assertEquals(deliveryFee, actualPost.getTotalDeliveryFee().get());
+    }
+
+    @Test
+    public void testDeliverTwoPackageToSamePostWithDeliveryFee() {
+        // Given
+        PostPackage postPackage1 = new PostPackage("94072", 1.578D);
+        BigDecimal deliveryFee1 = new BigDecimal(10);
+
+        PostPackage postPackage2 = new PostPackage("94072", 4.578D);
+        BigDecimal deliveryFee2 = new BigDecimal(20);
+
+        // Test
+        postDao.deliverPackage(postPackage1, deliveryFee1);
+        postDao.deliverPackage(postPackage2, deliveryFee2);
+
+        // Verify
+        List<Post> actualPostList = postDao.findAllPosts();
+        assertNotNull(actualPostList);
+        assertEquals(1, actualPostList.size());
+
+        Post actualPost = actualPostList.get(0);
+        assertEquals(postPackage1.getPostcode(), actualPost.getPostcode());
+        double expectedTotalWeight = postPackage1.getPackageWeight() + postPackage2.getPackageWeight();
+        assertEquals(expectedTotalWeight, actualPost.getTotalWeight());
+
+        assertTrue(actualPost.getTotalDeliveryFee().isPresent());
+        assertEquals(new BigDecimal(30), actualPost.getTotalDeliveryFee().get());
     }
 }

@@ -1,19 +1,26 @@
 package cz.zemkoz.excercise.packagedelivery.domain;
 
+import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
 public final class Post {
     private final String postcode;
     private double totalWeight;
+    private BigDecimal totalDeliveryFee;
 
     public Post(String postcode) {
-        this.postcode = postcode;
-        totalWeight = 0D;
+        this(postcode, 0D, null);
     }
 
     public Post(String postcode, double totalWeight) {
+        this(postcode, totalWeight, null);
+    }
+
+    public Post(String postcode, double totalWeight, BigDecimal totalDeliveryFee) {
         this.postcode = postcode;
         this.totalWeight = totalWeight;
+        this.totalDeliveryFee = totalDeliveryFee;
     }
 
     public String getPostcode() {
@@ -24,8 +31,18 @@ public final class Post {
         return totalWeight;
     }
 
-    public void setTotalWeight(double totalWeight) {
-        this.totalWeight = totalWeight;
+    public Optional<BigDecimal> getTotalDeliveryFee() {
+        return Optional.ofNullable(totalDeliveryFee);
+    }
+
+    public void addWeight(double weight) {
+        this.totalWeight += weight;
+    }
+
+    public void addDeliveryFee(BigDecimal deliveryFee) {
+        this.totalDeliveryFee = this.totalDeliveryFee == null
+                ? deliveryFee
+                : this.totalDeliveryFee.add(deliveryFee);
     }
 
     @Override

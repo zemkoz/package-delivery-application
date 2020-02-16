@@ -1,4 +1,4 @@
-package cz.zemkoz.excercise.packagedelivery.service;
+package cz.zemkoz.excercise.packagedelivery.parser;
 
 import cz.zemkoz.excercise.packagedelivery.domain.PostPackage;
 import cz.zemkoz.excercise.packagedelivery.exception.ParseStringFailedException;

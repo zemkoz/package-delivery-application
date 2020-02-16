@@ -35,7 +35,7 @@ public final class PostPackage {
 
     @Override
     public String toString() {
-        return "Package{" +
+        return "PostPackage{" +
                 "postcode='" + postcode + '\'' +
                 ", packageWeight=" + packageWeight +
                 '}';

@@ -2,6 +2,7 @@ package cz.zemkoz.excercise.packagedelivery.service;
 
 import cz.zemkoz.excercise.packagedelivery.domain.Post;
 import cz.zemkoz.excercise.packagedelivery.domain.PostPackage;
+import cz.zemkoz.excercise.packagedelivery.parser.StringParser;
 import cz.zemkoz.excercise.packagedelivery.repository.PostDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,14 +21,16 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class PostServiceImpl_getPostListTest {
-    @Mock StringParser<PostPackage> mockPackageStringParser;
+    @Mock
+    StringParser<PostPackage> mockPackageStringParser;
     @Mock PostDao mockPostDao;
+    @Mock DeliveryPriceListService mockDeliveryPriceListService;
 
     private PostService postService;
 
     @BeforeEach
     public void setUp() {
-        postService = new PostServiceImpl(mockPackageStringParser, mockPostDao);
+        postService = new PostServiceImpl(mockPackageStringParser, mockPostDao, mockDeliveryPriceListService);
     }
 
     @Test
